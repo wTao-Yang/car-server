@@ -59,7 +59,7 @@ router.post('/updateHeadPic', function (req, res, next) {
 
 router.post('/collection', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from car where carId = (select carId from collection where userName= ${req.body.userName} and status = true)`, (data) => {
+  request(`select * from car where carId in (select carId from collection where userName= ${req.body.userName} and status = true)`, (data) => {
     console.log(data.result)
     if(data.code==0){
       let result=data.result

@@ -31,7 +31,7 @@ router.post('/register', function (req, res) {
   let date=new Date();
   let now = `${date.getFullYear().toString()}-${(date.getMonth()+1).toString()}-${date.getDate().toString()}`
   // console.log(now)
-  request(`insert into user values(${req.body.userName},${req.body.passWord},${req.body.phone},${req.body.userName},'http://localhost:8888/aaa.jpg','${now}')`,(questions)=>{
+  request(`insert into user (userName,passWord,phone,nickName,headPic,registerDay) values(${req.body.userName},${req.body.passWord},${req.body.phone},${req.body.userName},'http://localhost:8888/aaa.jpg','${now}')`,(questions)=>{
     console.log(questions)
     if(questions.code==0)
     res.send({isSuccess:true});
@@ -49,6 +49,29 @@ router.post('/login', function (req, res) {
       else
       res.send({isSuccess:false});
     })
+})
+
+router.post('/isForget', function (req, res) {
+  console.log(req.body)
+  request(`select * from user where userName=${req.body.userName} and phone=${req.body.phone}`,(questions)=>{
+    console.log(questions)
+    if(questions.result.length!=0)
+    res.send({isSuccess:true});
+    else
+    res.send({isSuccess:false});
+  })
+})
+
+router.post('/updatePSW', function (req, res) {
+  console.log(req.body)
+  request(`update user set passWord = '${req.body.passWord}' where userName= ${req.body.userName}`, (data) => {
+    console.log(data.result)
+    if(data.code==0){
+      res.send({isSuccess:true});
+    }else{
+      res.send({isSuccess:false});
+    }
+  })
 })
 
 module.exports = router;

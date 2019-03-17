@@ -7,7 +7,7 @@ var bodyParser=require('body-parser');
 
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var shopRouter = require('./routes/shopCar');
 var carRouter = require('./routes/car');
 var selfRouter = require('./routes/self');
 
@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/shopCar', shopRouter);
 app.use('/cars', carRouter);
 app.use('/self', selfRouter);
 

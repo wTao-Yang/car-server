@@ -74,4 +74,16 @@ router.post('/updatePSW', function (req, res) {
   })
 })
 
+router.post('/getHotBrand', function(req, res, next) {
+  request(`select * from hotBrand limit 0,4 `,(data)=>{
+    res.send({data});
+  })
+});
+
+router.post('/getWheel', function(req, res, next) {
+  request(`select * from wheel limit 0,5 `,(data)=>{
+    res.send({data});
+  })
+});
+
 module.exports = router;

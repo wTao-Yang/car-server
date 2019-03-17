@@ -20,9 +20,6 @@ router.post('/carList', function(req, res, next) {
   }else{
     condition='carId IS NOT NULL'
   }
-  // if(condition==''){
-  //   condition='carId IS NOT NULL and'
-  // }
   console.log(condition)
   request(`select * from car where ${condition} order by carId desc limit ${10*req.body.page},10`,(data)=>{
     res.send({data});
@@ -30,15 +27,19 @@ router.post('/carList', function(req, res, next) {
 });
 
 router.post('/getHot', function(req, res, next) {
-  // res.render('index', { title: 'Express' });
   console.log(req.body)
   request(`select * from car order by clickNum desc limit 0,5 `,(data)=>{
     res.send({data});
   })
 });
 
+router.post('/getSimilar', function(req, res, next) {
+  request(`select * from car where price <=${req.body.price} and carId != ${req.body.carId} order by price desc limit 0,5 `,(data)=>{
+    res.send({data});
+  })
+});
+
 router.post('/updateClickNum', function(req, res, next) {
-  // res.render('index', { title: 'Express' });
   console.log(req.body)
   request(`update car set clickNum = ${req.body.clickNum} where carId=${req.body.id}`,(data)=>{
     res.send({data});
@@ -77,5 +78,15 @@ router.post('/isCollect', function(req, res, next) {
     
   })
 });
+
+router.post('/appoint', function (req, res) {
+  // console.log(now)
+  request(`insert into appoint (userName,carId,price,carTitle) values('${req.body.userName}','${req.body.carId}','${req.body.price}','${req.body.carTitle}')`,(questions)=>{
+    if(questions.code==0)
+    res.send({isSuccess:true});
+    else
+    res.send({isSuccess:false});
+  })
+})
 
 module.exports = router;

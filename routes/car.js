@@ -21,27 +21,27 @@ router.post('/carList', function(req, res, next) {
     condition='carId IS NOT NULL'
   }
   console.log(condition)
-  request(`select * from car where ${condition} order by carId desc limit ${10*req.body.page},10`,(data)=>{
+  request(`select * from car where ${condition} and status=0 order by carId desc limit ${10*req.body.page},10`,(data)=>{
     res.send({data});
   })
 });
 
 router.post('/getHot', function(req, res, next) {
   console.log(req.body)
-  request(`select * from car order by clickNum desc limit 0,5 `,(data)=>{
+  request(`select * from car where status=0 order by clickNum desc limit 0,5 `,(data)=>{
     res.send({data});
   })
 });
 
 router.post('/getSimilar', function(req, res, next) {
-  request(`select * from car where price <=${req.body.price} and carId != ${req.body.carId} order by price desc limit 0,5 `,(data)=>{
+  request(`select * from car where price <=${req.body.price} and carId != ${req.body.carId} and status=0 order by price desc limit 0,5 `,(data)=>{
     res.send({data});
   })
 });
 
 router.post('/updateClickNum', function(req, res, next) {
   console.log(req.body)
-  request(`update car set clickNum = ${req.body.clickNum} where carId=${req.body.id}`,(data)=>{
+  request(`update car set clickNum = ${req.body.clickNum} where carId=${req.body.carId}`,(data)=>{
     res.send({data});
   })
 });
@@ -79,14 +79,51 @@ router.post('/isCollect', function(req, res, next) {
   })
 });
 
-router.post('/appoint', function (req, res) {
-  // console.log(now)
-  request(`insert into appoint (userName,carId,price,carTitle) values('${req.body.userName}','${req.body.carId}','${req.body.price}','${req.body.carTitle}')`,(questions)=>{
-    if(questions.code==0)
-    res.send({isSuccess:true});
-    else
-    res.send({isSuccess:false});
+router.post('/appoint', function (req, res, next) {
+  // res.render('index', { title: 'Express' });
+  request(`select * from appoint where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
+    console.log(data.result)
+    if(data.result.length==0){
+    request(`insert into appoint (userName,carId) values('${req.body.userName}','${req.body.carId}')`, (data) => {
+      if(data.code==0)
+      res.send({isSuccess:true});
+      else
+      res.send({isSuccess:false});
+    })
+    }else{
+      let status=data.result[0].status;
+      request(`update appoint set status= ${req.body.status} where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
+        if(status==0){
+          res.send({code:0});
+        }else{
+          if(data.code==0)
+          res.send({isSuccess:true});
+          else
+          res.send({isSuccess:false});
+        }
+      })
+    }
   })
-})
+});
+
+// router.post('/appoint', function (req, res) {
+//   // console.log(now)
+//   request(`insert into appoint (userName,carId,price,carTitle) values('${req.body.userName}','${req.body.carId}','${req.body.price}','${req.body.carTitle}')`,(questions)=>{
+//     if(questions.code==0)
+//     res.send({isSuccess:true});
+//     else
+//     res.send({isSuccess:false});
+//   })
+// })
+
+// router.post('/appoint', function (req, res) {
+//   // console.log(now)
+//   request(`insert into appoint (userName,carId,price,carTitle) values('${req.body.userName}','${req.body.carId}','${req.body.price}','${req.body.carTitle}')`,(questions)=>{
+//     if(questions.code==0)
+//     res.send({isSuccess:true});
+//     else
+//     res.send({isSuccess:false});
+//   })
+// })
 
 module.exports = router;

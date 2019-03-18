@@ -16,7 +16,7 @@ var request=(userGetSql,callback)=>{
 
           if(err){
 
-            console.log('[SELECT ERROR] - ',err.message);
+            // console.log('[SELECT ERROR] - ',err.message);
             var error=err.message;
             var data={ error,'code':10001 }
             callback(data) 
@@ -24,7 +24,7 @@ var request=(userGetSql,callback)=>{
 
           }       
         var data={ result,'code':0 }
-        console.log(data);  
+        // console.log(data);  
         callback(data) 
 
   });

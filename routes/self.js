@@ -95,5 +95,43 @@ router.post('/setSuggest', function (req, res, next) {
   })
 });
 
+router.post('/getApply', function (req, res, next) {
+  // res.render('index', { title: 'Express' });
+  request(`select * from apply where userName = ${req.body.userName} and status = ${req.body.status}`, (data) => {
+    console.log(data.result)
+    if(data.code==0){
+      let result=data.result
+      res.send({result,code:0})
+    }else{
+      res.send({code:'10004'})
+    }
+  })
+});
+
+router.post('/getAppoint', function (req, res, next) {
+  // res.render('index', { title: 'Express' });
+  request(`select * from car where carId in (select carId from appoint where userName = ${req.body.userName} and status= ${req.body.status})`, (data) => {
+    console.log(data.result)
+    if(data.code==0){
+      let result=data.result
+      res.send({result,code:0})
+    }else{
+      res.send({code:'10004'})
+    }
+  })
+});
+
+router.post('/cancelApply', function (req, res) {
+  console.log(req.body)
+  request(`update apply set status = 1 where applyId=${req.body.applyId}`, (data) => {
+    console.log(data.result)
+    if(data.code==0){
+      res.send({isSuccess:true});
+    }else{
+      res.send({isSuccess:false});
+    }
+  })
+})
+
 
 module.exports = router;

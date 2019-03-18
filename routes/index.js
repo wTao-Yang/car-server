@@ -31,7 +31,7 @@ router.post('/register', function (req, res) {
   let date=new Date();
   let now = `${date.getFullYear().toString()}-${(date.getMonth()+1).toString()}-${date.getDate().toString()}`
   // console.log(now)
-  request(`insert into user (userName,passWord,phone,nickName,headPic,registerDay) values(${req.body.userName},${req.body.passWord},${req.body.phone},${req.body.userName},'http://localhost:8888/aaa.jpg','${now}')`,(questions)=>{
+  request(`insert into user (userName,passWord,phone,nickName,headPic,registerDay) values(${req.body.userName},${req.body.passWord},${req.body.phone},${req.body.userName},'http://localhost:8888/headpic.jpg','${now}')`,(questions)=>{
     console.log(questions)
     if(questions.code==0)
     res.send({isSuccess:true});

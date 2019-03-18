@@ -5,7 +5,6 @@ var request=mysql.request;
 /* GET home page. */
 router.post('/carList', function(req, res, next) {
   // res.render('index', { title: 'Express' });
-  console.log(req.body)
   let title=''
   let brand=''
   let lowPrice=''
@@ -20,14 +19,12 @@ router.post('/carList', function(req, res, next) {
   }else{
     condition='carId IS NOT NULL'
   }
-  console.log(condition)
   request(`select * from car where ${condition} and status=0 order by carId desc limit ${10*req.body.page},10`,(data)=>{
     res.send({data});
   })
 });
 
 router.post('/getHot', function(req, res, next) {
-  console.log(req.body)
   request(`select * from car where status=0 order by clickNum desc limit 0,5 `,(data)=>{
     res.send({data});
   })
@@ -40,7 +37,6 @@ router.post('/getSimilar', function(req, res, next) {
 });
 
 router.post('/updateClickNum', function(req, res, next) {
-  console.log(req.body)
   request(`update car set clickNum = ${req.body.clickNum} where carId=${req.body.carId}`,(data)=>{
     res.send({data});
   })
@@ -48,7 +44,6 @@ router.post('/updateClickNum', function(req, res, next) {
 
 router.post('/carDetail', function(req, res, next) {
   // res.render('index', { title: 'Express' });
-  console.log(req.body)
   request(`select * from car where carId = ${req.body.carId}`,(data)=>{
     res.send({data});
   })
@@ -56,7 +51,6 @@ router.post('/carDetail', function(req, res, next) {
 
 router.post('/getBrand', function(req, res, next) {
   // res.render('index', { title: 'Express' });
-  console.log(req.body)
   request(`select brand from brand`,(data)=>{
     if(data.code==0)
       res.send({data});
@@ -68,7 +62,6 @@ router.post('/getBrand', function(req, res, next) {
 
 router.post('/isCollect', function(req, res, next) {
   // res.render('index', { title: 'Express' });
-  console.log(req.body)
   request(`select status from collection where carId = ${req.body.carId} and userName = ${req.body.userName}`,(data)=>{
     if(data.code==0){
       res.send(data.result);
@@ -82,7 +75,6 @@ router.post('/isCollect', function(req, res, next) {
 router.post('/appoint', function (req, res, next) {
   // res.render('index', { title: 'Express' });
   request(`select * from appoint where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
-    console.log(data.result)
     if(data.result.length==0){
     request(`insert into appoint (userName,carId) values('${req.body.userName}','${req.body.carId}')`, (data) => {
       if(data.code==0)

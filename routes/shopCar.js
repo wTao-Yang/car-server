@@ -8,7 +8,6 @@ router.post('/apply', function (req, res) {
   let now = `${date.getFullYear().toString()}-${(date.getMonth()+1).toString()}-${date.getDate().toString()}`
   // console.log(now)
   request(`insert into apply (userName,name,phone,brand,mileage,price,year) values('${req.body.userName}','${req.body.form.name}','${req.body.form.phone}','${req.body.form.brand}','${req.body.form.mileage}','${req.body.form.price}','${req.body.form.year}')`,(questions)=>{
-    console.log(questions)
     if(questions.code==0)
     res.send({isSuccess:true});
     else

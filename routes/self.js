@@ -52,7 +52,7 @@ router.post('/updateHeadPic', function (req, res, next) {
 
 router.post('/collection', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from car where carId in (select carId from collection where userName= ${req.body.userName} and status = true)`, (data) => {
+  request(`select * from car where carId in (select carId from collection where userName= ${req.body.userName} and status = true) order by status asc`, (data) => {
     if(data.code==0){
       let result=data.result
       res.send({result,code:0})
@@ -64,7 +64,7 @@ router.post('/collection', function (req, res, next) {
 
 router.post('/mySold', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from car where userName = ${req.body.userName}`, (data) => {
+  request(`select * from car where userName = ${req.body.userName} order by status asc`, (data) => {
     if(data.code==0){
       let result=data.result
       res.send({result,code:0})
@@ -76,7 +76,8 @@ router.post('/mySold', function (req, res, next) {
 
 router.post('/setSuggest', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`insert into suggestion values(${req.body.userName},${req.body.suggestion})`, (data) => {
+  request(`insert into suggestion values(${req.body.userName},'${req.body.suggestion}')`, (data) => {
+    console.log(data)
     if(data.code==0){
       res.send({code:0})
     }else{
@@ -87,7 +88,7 @@ router.post('/setSuggest', function (req, res, next) {
 
 router.post('/getApply', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from apply where userName = ${req.body.userName} and status = ${req.body.status}`, (data) => {
+  request(`select * from apply where userName = ${req.body.userName}`, (data) => {
     if(data.code==0){
       let result=data.result
       res.send({result,code:0})
@@ -99,7 +100,7 @@ router.post('/getApply', function (req, res, next) {
 
 router.post('/getAppoint', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from car where carId in (select carId from appoint where userName = ${req.body.userName} and status= ${req.body.status})`, (data) => {
+  request(`select car.*,appoint.status AS apStatus from car,appoint where car.carId=appoint.carId AND car.carId in (select carId from appoint where userName = ${req.body.userName}) order by appoint.status asc`, (data) => {
     if(data.code==0){
       let result=data.result
       res.send({result,code:0})

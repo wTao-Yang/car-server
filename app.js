@@ -11,6 +11,7 @@ var request=mysql.request;
 
 let baseUrl='http://localhost:8088/'
 
+// let baseUrl='http://47.112.4.52:8080/'
 
 var indexRouter = require('./routes/index');
 var shopRouter = require('./routes/shopCar');
@@ -89,8 +90,9 @@ app.post('/upload', upload.single('imageFile'), function(req, res, next) {
   let fileName= Date.now() +'-'+ req.file.originalname;
   fs.rename(req.file.path, "uploads/"+fileName, function(err) {
     request(`UPDATE user SET headPic = '${baseUrl}${fileName}' WHERE userName = ${req.body.userName}`,(questions)=>{
+      console.log(questions)
       if(questions.code==0){
-          res.send({code:0});
+          res.send({code:0,url:`${baseUrl}${fileName}`});
       }else{
           res.send({code:10003})
       }

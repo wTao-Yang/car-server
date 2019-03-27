@@ -92,7 +92,7 @@ app.post('/upload', upload.single('imageFile'), function(req, res, next) {
     request(`UPDATE user SET headPic = '${baseUrl}${fileName}' WHERE userName = ${req.body.userName}`,(questions)=>{
       console.log(questions)
       if(questions.code==0){
-          res.send({code:0,url:`${baseUrl}${fileName}`});
+          res.send({code:0,data:{url:`${baseUrl}${fileName}`,name:`${fileName}`}});
       }else{
           res.send({code:10003})
       }

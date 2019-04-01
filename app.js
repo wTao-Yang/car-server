@@ -17,6 +17,7 @@ var indexRouter = require('./routes/index');
 var shopRouter = require('./routes/shopCar');
 var carRouter = require('./routes/car');
 var selfRouter = require('./routes/self');
+var managerRouter = require('./routes/manager');
 
 var app = express();
 app.use(bodyParser.json());
@@ -48,6 +49,7 @@ app.use('/', indexRouter);
 app.use('/shopCar', shopRouter);
 app.use('/cars', carRouter);
 app.use('/self', selfRouter);
+app.use('/manager', managerRouter);
 
 var upload = multer({
   dest: './uploads'

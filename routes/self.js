@@ -7,7 +7,7 @@ router.post('/collect', function (req, res, next) {
   // res.render('index', { title: 'Express' });
   request(`select * from collection where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
     if(data.result.length==0){
-    request(`insert into collection values(${req.body.userName},${req.body.carId},${req.body.status})`, (data) => {
+    request(`insert into collection values(${req.body.userName},${req.body.carId},${req.body.status},now())`, (data) => {
       res.send({code:0});
     })
     }else{
@@ -52,7 +52,7 @@ router.post('/updateHeadPic', function (req, res, next) {
 
 router.post('/collection', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`select * from car where carId in (select carId from collection where userName= ${req.body.userName} and status = true) order by status asc`, (data) => {
+  request(`select * from car where carId in (select carId from collection where userName= ${req.body.userName} and status = true order by update_time desc) order by status asc`, (data) => {
     if(data.code==0){
       let result=data.result
       res.send({result,code:0})

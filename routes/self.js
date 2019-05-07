@@ -76,7 +76,8 @@ router.post('/mySold', function (req, res, next) {
 
 router.post('/setSuggest', function (req, res, next) {
   // res.render('index', { title: 'Express' });
-  request(`insert into suggestion values(${req.body.userName},'${req.body.suggestion}')`, (data) => {
+  let id = new Date().getTime()+Math.round(Math.random()*100)
+  request(`insert into suggestion values(${id},${req.body.userName},'${req.body.suggestion}',0,now())`, (data) => {
     console.log(data)
     if(data.code==0){
       res.send({code:0})

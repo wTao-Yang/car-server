@@ -64,7 +64,7 @@ app.post('/uploads', upload.array('imageFile', 5), function(req, res, next) {
       // 图片会放在uploads目录并且没有后缀，需要自己转存，用到fs模块
       // 对临时文件转存，fs.rename(oldPath, newPath,callback);
       let fileName=Date.now() +'-'+req.files[i].originalname;
-      fileNames.push(baseUrl+fileName)
+      fileNames.push(fileName)
       fs.rename(req.files[i].path, "uploads/" + fileName, function(err) {
           if (err) {
               throw err;
@@ -91,14 +91,30 @@ app.post('/upload', upload.single('imageFile'), function(req, res, next) {
   // req.file 是 前端表单name=="imageFile" 的文件信息（不是数组）
   let fileName= Date.now() +'-'+ req.file.originalname;
   fs.rename(req.file.path, "uploads/"+fileName, function(err) {
-    request(`UPDATE user SET headPic = '${baseUrl}${fileName}' WHERE userName = ${req.body.userName}`,(questions)=>{
+    request(`UPDATE user SET headPic = '${fileName}' WHERE userName = ${req.body.userName}`,(questions)=>{
       console.log(questions)
       if(questions.code==0){
-          res.send({code:0,data:{url:`${baseUrl}${fileName}`,name:`${fileName}`}});
+          res.send({code:0,data:{url:`${fileName}`,name:`${fileName}`}});
       }else{
           res.send({code:10003})
       }
   })  
+    if (err) {
+          res.send(err)
+      }
+  })
+  // res.writeHead(200, {
+  //     "Access-Control-Allow-Origin": "*"
+  // });
+  // res.end(JSON.stringify(req.file)+JSON.stringify(req.body));
+})
+
+// 单域单文件上传：input[file]的 multiple != "multiple"
+app.post('/uploadWheel', upload.single('imageFile'), function(req, res, next) {
+  // req.file 是 前端表单name=="imageFile" 的文件信息（不是数组）
+  let fileName= Date.now() +'-'+ req.file.originalname;
+  fs.rename(req.file.path, "uploads/"+fileName, function(err) {
+          res.send({code:0,data:{url:`${fileName}`,name:`${fileName}`}});
     if (err) {
           res.send(err)
       }

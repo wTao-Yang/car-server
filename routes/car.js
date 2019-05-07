@@ -76,6 +76,7 @@ router.post('/appoint', function (req, res, next) {
   // res.render('index', { title: 'Express' });
   request(`select * from appoint where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
     if(data.result.length==0){
+    console.log(req.body)
     let id=new Date().getTime()+Math.round(Math.random()*100);
     request(`insert into appoint (appointId,userName,carId,carTitle,price) values('${id}','${req.body.userName}','${req.body.carId}','${req.body.carTitle}','${req.body.price}')`, (data) => {
       if(data.code==0)
@@ -84,7 +85,7 @@ router.post('/appoint', function (req, res, next) {
       res.send({isSuccess:false});
     })
     }else{
-      let status=data.result[0].status;
+      let status = data.result[0].status;
       request(`update appoint set status= ${req.body.status} where userName= ${req.body.userName} and carId= ${req.body.carId}`, (data) => {
         if(status==0){
           res.send({code:0});

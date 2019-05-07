@@ -8,7 +8,9 @@ router.post('/apply', function (req, res) {
   let now = `${date.getFullYear().toString()}-${(date.getMonth()+1).toString()}-${date.getDate().toString()}`
   // console.log(now)
   let id=new Date().getTime()+Math.round(Math.random()*100);
+  console.log(id)
   request(`insert into apply (applyId,userName,name,phone,brand,mileage,price,year) values('${id}','${req.body.userName}','${req.body.form.name}','${req.body.form.phone}','${req.body.form.brand}','${req.body.form.mileage}','${req.body.form.price}','${req.body.form.year}')`,(questions)=>{
+    console.log(questions)
     if(questions.code==0)
     res.send({isSuccess:true});
     else
